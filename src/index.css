@@ -1,0 +1,12 @@
+.hash-link{
+    opacity: 0;
+    padding-left: 0.5rem;
+    transition: opacity var(--ifm-transition-fast);
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+h3:hover .hash-link,
+h4:hover .hash-link{
+    opacity: 1;
+}
