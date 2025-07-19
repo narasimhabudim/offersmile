@@ -24,6 +24,15 @@ const AdminPanel = ({ onClose }) => {
 
   const fetchData = async () => {
     try {
+      // If Supabase is not configured, use demo data
+      if (!import.meta.env.VITE_SUPABASE_URL || import.meta.env.VITE_SUPABASE_URL === 'https://placeholder.supabase.co') {
+        setEvents([])
+        setGallery([])
+        setVolunteers([])
+        setInquiries([])
+        return
+      }
+
       // Fetch events
       const { data: eventsData } = await supabase
         .from('events')

@@ -13,6 +13,50 @@ const Gallery = () => {
 
   const fetchGalleryImages = async () => {
     try {
+      // If Supabase is not configured, use fallback data
+      if (!import.meta.env.VITE_SUPABASE_URL || import.meta.env.VITE_SUPABASE_URL === 'https://placeholder.supabase.co') {
+        setImages([
+          {
+            id: 1,
+            title: 'Education Support Program',
+            image_url: 'https://images.pexels.com/photos/8613089/pexels-photo-8613089.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop',
+            description: 'Providing educational materials to underprivileged children'
+          },
+          {
+            id: 2,
+            title: 'Healthcare Initiative',
+            image_url: 'https://images.pexels.com/photos/6995247/pexels-photo-6995247.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop',
+            description: 'Free medical checkup camp in rural areas'
+          },
+          {
+            id: 3,
+            title: 'Food Distribution',
+            image_url: 'https://images.pexels.com/photos/6646918/pexels-photo-6646918.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop',
+            description: 'Distributing meals to homeless individuals'
+          },
+          {
+            id: 4,
+            title: 'Community Outreach',
+            image_url: 'https://images.pexels.com/photos/6646917/pexels-photo-6646917.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop',
+            description: 'Engaging with local communities for awareness programs'
+          },
+          {
+            id: 5,
+            title: 'Skill Development',
+            image_url: 'https://images.pexels.com/photos/8613092/pexels-photo-8613092.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop',
+            description: 'Teaching vocational skills to empower individuals'
+          },
+          {
+            id: 6,
+            title: 'Environmental Care',
+            image_url: 'https://images.pexels.com/photos/8613091/pexels-photo-8613091.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop',
+            description: 'Tree plantation and environmental awareness campaigns'
+          }
+        ])
+        setLoading(false)
+        return
+      }
+
       const { data, error } = await supabase
         .from('gallery')
         .select('*')

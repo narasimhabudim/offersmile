@@ -34,6 +34,14 @@ const Volunteer = () => {
   const onSubmit = async (data) => {
     setIsSubmitting(true)
     try {
+      // If Supabase is not configured, show success message without saving
+      if (!import.meta.env.VITE_SUPABASE_URL || import.meta.env.VITE_SUPABASE_URL === 'https://placeholder.supabase.co') {
+        toast.success('Thank you for joining us! (Demo mode - please set up Supabase to save data)')
+        reset()
+        setIsSubmitting(false)
+        return
+      }
+
       const { error } = await supabase
         .from('volunteers')
         .insert([{

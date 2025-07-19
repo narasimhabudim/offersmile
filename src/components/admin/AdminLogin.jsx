@@ -12,6 +12,13 @@ const AdminLogin = ({ onClose }) => {
   const onSubmit = async (data) => {
     setIsLoading(true)
     try {
+      // If Supabase is not configured, show demo message
+      if (!import.meta.env.VITE_SUPABASE_URL || import.meta.env.VITE_SUPABASE_URL === 'https://placeholder.supabase.co') {
+        toast.error('Please set up Supabase to enable admin authentication')
+        setIsLoading(false)
+        return
+      }
+
       const { error } = await signIn(data.email, data.password)
       if (error) {
         toast.error('Invalid credentials. Please try again.')

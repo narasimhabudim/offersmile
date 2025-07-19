@@ -12,6 +12,41 @@ const Events = () => {
 
   const fetchEvents = async () => {
     try {
+      // If Supabase is not configured, use fallback data
+      if (!import.meta.env.VITE_SUPABASE_URL || import.meta.env.VITE_SUPABASE_URL === 'https://placeholder.supabase.co') {
+        setEvents([
+          {
+            id: 1,
+            title: 'Blankets Distribution',
+            description: 'Distribution of blankets for elderly people during winter season',
+            date: '2024-01-25',
+            location: 'Old Age Home, Bangalore',
+            image: 'https://images.pexels.com/photos/6646918/pexels-photo-6646918.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop',
+            participants: 25
+          },
+          {
+            id: 2,
+            title: 'Monthly Groceries Support',
+            description: 'Providing required monthly groceries for an old age home',
+            date: '2024-02-19',
+            location: 'Community Center, Rajajinagar',
+            image: 'https://images.pexels.com/photos/6995247/pexels-photo-6995247.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop',
+            participants: 15
+          },
+          {
+            id: 3,
+            title: 'Nutrition Program',
+            description: 'Distributing fruits and medicines for orphanage children',
+            date: '2024-03-12',
+            location: 'Children\'s Home, Bangalore',
+            image: 'https://images.pexels.com/photos/6646917/pexels-photo-6646917.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop',
+            participants: 30
+          }
+        ])
+        setLoading(false)
+        return
+      }
+
       const { data, error } = await supabase
         .from('events')
         .select('*')
@@ -22,7 +57,7 @@ const Events = () => {
       setEvents(data || [])
     } catch (error) {
       console.error('Error fetching events:', error)
-      // Fallback to sample data if database is not set up
+      // Fallback to sample data
       setEvents([
         {
           id: 1,
