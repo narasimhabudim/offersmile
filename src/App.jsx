@@ -1,46 +1,69 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../src/index.css';
+import { useState, useEffect } from 'react'
+import { Toaster } from 'react-hot-toast'
+import { AuthProvider, useAuth } from './contexts/AuthContext'
+import Header from './components/layout/Header'
+import Hero from './components/sections/Hero'
+import About from './components/sections/About'
+import Events from './components/sections/Events'
+import Gallery from './components/sections/Gallery'
+import Volunteer from './components/sections/Volunteer'
+import Contact from './components/sections/Contact'
+import Footer from './components/sections/Footer'
+import AdminLogin from './components/admin/AdminLogin'
+import AdminPanel from './components/admin/AdminPanel'
 
-// Default library
-import Container from 'react-bootstrap/Container';
-import Alert from 'react-bootstrap/Alert';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+function AppContent() {
+  const [showAdminLogin, setShowAdminLogin] = useState(false)
+  const [showAdminPanel, setShowAdminPanel] = useState(false)
+  const { user } = useAuth()
 
-// CustomComponents
-import NavbarComponent from './components/Navbar';
-import About from './components/Aboutus';
-import Home from './components/Home';
-import Joinus from './components/Joinus';
-import Donate from './components/media/Donate';
-import Gallery from './components/Gallery';
-import Contactus from './components/Contactus';
-import Footer from './components/Footer';
-import Privacy from './components/Privacy';
-import Refund from './components/Refund';
-import Notification from './components/Notification';
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash
+      if (hash === '#admin-login' && !user) {
+        setShowAdminLogin(true)
+      } else if (hash === '#admin' && user) {
+        setShowAdminPanel(true)
+      }
+    }
+
+    window.addEventListener('hashchange', handleHashChange)
+    handleHashChange() // Check initial hash
+
+    return () => window.removeEventListener('hashchange', handleHashChange)
+  }, [user])
+
+  return (
+    <div className="min-h-screen bg-white">
+      <Header />
+      <main>
+        <Hero />
+        <About />
+        <Events />
+        <Gallery />
+        <Volunteer />
+        <Contact />
+      </main>
+      <Footer />
+      
+      {showAdminLogin && !user && (
+        <AdminLogin onClose={() => setShowAdminLogin(false)} />
+      )}
+      
+      {showAdminPanel && user && (
+        <AdminPanel onClose={() => setShowAdminPanel(false)} />
+      )}
+      
+      <Toaster position="top-right" />
+    </div>
+  )
+}
 
 function App() {
-  const {innerWidth: width, innerHeight: height} = window;
   return (
-    <>
-        <Container fluid style={{"height":innerHeight}}>
-          <NavbarComponent />
-          <Notification /> 
-          <Router>
-            <Routes>
-              <Route path="/" element= {<Home />} />
-              <Route path="/gallery" element={<Gallery/>} />
-              <Route path="/joinus" element={<Joinus/>} />
-              <Route path="/contactus" element={<Contactus/>} />
-              <Route path="/donate" element={<Donate/>} />
-              <Route path="/privacy" element={<Privacy/>} />
-              <Route path="/refund" element={<Refund/>} />
-              <Route path="/about" element={<About/>} />
-            </Routes>
-          </Router>
-          <Footer />
-        </Container>
-    </>
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   )
 }
 
